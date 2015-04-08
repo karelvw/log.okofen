@@ -33,22 +33,15 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app)
     return $twig;
 }));
 
-$app->get('/hello', function ()
-{
-    return 'Hello!';
-});
+// mouting controllers
+$app->mount('/okofen', new Okofen\OkofenController());
 
 // default route
-$app->match('/', function (Request $request) use($app)
+$app->get('/', function (Request $request) use($app)
 {
-    
-    // some default data for when the form is displayed the first time
-    $data = array(
-        'username' => 'P0060B5_XXXXXX',
-        'password' => 'password'
-    );
-    
     $form = $app['form.factory']->createBuilder('form')
+        ->setAction('okofen/get-ip')
+        ->setMethod('POST')
         ->add('username', 'text', array(
         'constraints' => array(
             new Assert\NotBlank(),
@@ -64,20 +57,15 @@ $app->match('/', function (Request $request) use($app)
         ->getForm();
     
     $form->handleRequest($request);
-    
-    if ($form->isValid()) {
-        $data = $form->getData();
-        
-        print_r($data);
-        
-        // do something with the data
-        
-        // redirect somewhere
-        //return $app->redirect('...');
-    }
-    
+
     return $app['twig']->render('index.html', array(
         'form' => $form->createView()
+    ));
+});
+
+$app->post('/', function () {
+    return $app['twig']->render('index.html', array(
+        'form' => null
     ));
 });
 
