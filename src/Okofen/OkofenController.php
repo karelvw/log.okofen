@@ -41,7 +41,7 @@ class OkofenController implements ControllerProviderInterface
         
         $columns = self::getLogColumns($url);
         
-        return $app->json($columns, 201);
+        return $app->json($columns);
         
         //$subRequest = Request::create('/', 'POST', array('url'=>$url, 'username'=>$username, 'password'=>$password));
         
@@ -96,12 +96,25 @@ class OkofenController implements ControllerProviderInterface
         $line_items = explode(';', $line);
         
         $columns = array();
-        
+                
         foreach($line_items as $i){
-            $i = preg_replace('/\s+/', '', $i);
+            
             $i = preg_replace("/\[(.*)\]/", "", $i);
+            $i = rtrim($i);
+            $i = preg_replace('/\s+/', '_',  $i);
         
-            $columns[] = $i;
+            //if(== "PE.")
+            //if(preg_match('PE[0-9]_', ));
+            if (preg_match("/PE[0-9]_/", substr($i, 0, 4))){ $columns['PE'][] = $i; }
+            elseif (preg_match("/HK[0-9]_/", substr($i, 0, 4))){ $columns['HK'][] = $i; }
+            elseif (preg_match("/PU[0-9]_/", substr($i, 0, 4))){ $columns['PU'][] = $i; }
+            elseif (preg_match("/WW[0-9]_/", substr($i, 0, 4))){ $columns['WW'][] = $i; }
+            elseif (preg_match("/Zirkp[0-9]_/", substr($i, 0, 7))){ $columns['ZIRK'][] = $i; }
+            elseif (preg_match("/Zubrp[0-9]_/", substr($i, 0, 7))){ $columns['ZUBR'][] = $i; }
+            elseif (preg_match("/KT_/", substr($i, 0, 4))){ $columns['KT'][] = $i; }
+            else $columns['GENERAL'][] = $i; 
+            
+            //
         }
         
         return $columns;

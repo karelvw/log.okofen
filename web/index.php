@@ -49,29 +49,6 @@ $app->get('/', function (Request $request) use($app)
     ));
 });
 
-/*
-$app->post('/', function (Request $request) use($app)
-{
-    $url = $request->request->get('url');
-    $username = $request->request->get('username');
-    $password = $request->request->get('password');
-    
-    $data = array(
-        "username" => $username,
-        "password" => $password,
-        "url" => $url
-    );
-    // echo $url;
-    
-    $form = buildLoginForm($app, $data);
-    
-    $form->handleRequest($request);
-    
-    return $app['twig']->render('index.html', array(
-        'form' => $form->createView()
-    ));
-});*/
-
 function buildLoginForm(Application $app, $data = null)
 {
     $form = $app['form.factory']->createBuilder('form', $data)

@@ -72,9 +72,13 @@
 			</form>
 		  </div>
 		  <div class="col-md-9">
-		  	<label class="checkbox-inline" ng-repeat="value in data track by $index">
-			  <input type="checkbox" id="[[$index + 1]]" value="[[value]]"> [[value]]
-			</label>
+		  	<div ng-repeat="(k,v) in data track by $index">
+		  		<label>[[k]]</label>
+		  		<br />
+		  		<label class="checkbox-inline" ng-repeat="(key,value) in v track by $index">
+			  		<input type="checkbox" id="[[$index + 1]]" value="value"> [[value]]
+				</label>
+			</div>
 		  </div>
 		</div>		
     </div><!-- /.container -->
