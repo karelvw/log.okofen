@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Silex\Provider\FormServiceProvider;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Silex\Application;
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -39,9 +40,41 @@ $app->mount('/okofen', new Okofen\OkofenController());
 // default route
 $app->get('/', function (Request $request) use($app)
 {
-    $form = $app['form.factory']->createBuilder('form')
-        ->setAction('okofen/get-ip')
-        ->setMethod('POST')
+    $form = buildLoginForm($app);
+    
+    $form->handleRequest($request);
+    
+    return $app['twig']->render('index.html', array(
+        'form' => $form->createView()
+    ));
+});
+
+/*
+$app->post('/', function (Request $request) use($app)
+{
+    $url = $request->request->get('url');
+    $username = $request->request->get('username');
+    $password = $request->request->get('password');
+    
+    $data = array(
+        "username" => $username,
+        "password" => $password,
+        "url" => $url
+    );
+    // echo $url;
+    
+    $form = buildLoginForm($app, $data);
+    
+    $form->handleRequest($request);
+    
+    return $app['twig']->render('index.html', array(
+        'form' => $form->createView()
+    ));
+});*/
+
+function buildLoginForm(Application $app, $data = null)
+{
+    $form = $app['form.factory']->createBuilder('form', $data)
         ->add('username', 'text', array(
         'constraints' => array(
             new Assert\NotBlank(),
@@ -56,17 +89,7 @@ $app->get('/', function (Request $request) use($app)
         ->add('submit', 'submit')
         ->getForm();
     
-    $form->handleRequest($request);
-
-    return $app['twig']->render('index.html', array(
-        'form' => $form->createView()
-    ));
-});
-
-$app->post('/', function () {
-    return $app['twig']->render('index.html', array(
-        'form' => null
-    ));
-});
+    return $form;
+}
 
 $app->run();
