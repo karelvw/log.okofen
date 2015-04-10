@@ -54,7 +54,7 @@
     <div class="container" ng-controller="OkofenFormController">
 
       <div class="page-header">
-        <h1>ÖkoFEN Pelletronic Touch log Charts</h1>
+        <h1>ÖkoFEN Pelletronic Touch visual</h1>
       </div>
 		
 		<div class="row" >
@@ -72,23 +72,31 @@
 			</form>
 		  </div>
 		  <div class="col-md-9">
+		  	<div ng-show="showLoading">
+		  		<img src="{{ asset('images/jar-loading.gif') }}" class="img-responsive" alt="Responsive image">
+		  	</div>
 		  	<div ng-repeat="(k,v) in data track by $index">
 		  		<label>[[k]]</label>
 		  		<br />
 		  		<label class="checkbox-inline" ng-repeat="(key,value) in v track by $index">
-			  		<input type="checkbox" id="[[$index + 1]]" value="value"> [[value]]
+			  		<input type="checkbox" ng-model="columnObject[value]" ng-change="change(value)" id="[[$index + 1]]" value="[[value]]"> [[value]]
 				</label>
 			</div>
 			<p>&nbsp;</p>
 			 <div class="form-inline" ng-show="showDatum">
 			  <div class="form-group">
 			    <label for="datum">Datum</label>
-			    <input type="text" class="form-control" id="datum" placeholder="datum">
+			    <input type="text" class="form-control" id="datum" placeholder="yyyymmdd">
 			  </div>
-			  <a href="#" class="btn btn-primary">Generate chart</a>
+			  <button ng-click="plot()" class="btn btn-primary" type="button">Plot graph</button>
 			</div>
-
 		  </div>
+		</div>
+		<div class="row" ng-show="showPlot" >
+			<div class="col-md-12"><p>&nbsp;</p></div>
+			<div class="col-md-12">
+				<img src="[[imageFromPlot]]" class="img-responsive" alt="Plot">
+			</div>
 		</div>		
     </div><!-- /.container -->
 

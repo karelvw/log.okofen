@@ -10,5 +10,7 @@ return array(
     'IntlDateFormatter' => $vendorDir . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
     'Locale' => $vendorDir . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/Locale.php',
     'NumberFormatter' => $vendorDir . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
+    'PHPlot' => $vendorDir . '/davefx/phplot/phplot/phplot.php',
+    'PHPlot_truecolor' => $vendorDir . '/davefx/phplot/phplot/phplot.php',
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
 );

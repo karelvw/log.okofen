@@ -4,4 +4,8 @@
 
 require_once __DIR__ . '/composer' . '/autoload_real.php';
 
+// Spoon is not autoloaded via Composer but uses its own old skool autoloader
+set_include_path(__DIR__ . '/spoon/library' . PATH_SEPARATOR . get_include_path());
+require_once 'spoon/spoon.php';
+
 return ComposerAutoloaderInitd2729f3be68d11c8fa52438d42c2518a::getLoader();

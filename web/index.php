@@ -11,11 +11,11 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 $app->register(new FormServiceProvider());
+$app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'translator.domains' => array()
 ));
-
 // register templates
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/../views',
@@ -40,6 +40,9 @@ $app->mount('/okofen', new Okofen\OkofenController());
 // default route
 $app->get('/', function (Request $request) use($app)
 {
+    // reset columns to show in session
+    $app['session']->set('columnsToShow', null);
+    
     $form = buildLoginForm($app);
     
     $form->handleRequest($request);
@@ -47,6 +50,8 @@ $app->get('/', function (Request $request) use($app)
     return $app['twig']->render('index.html', array(
         'form' => $form->createView()
     ));
+    
+    
 });
 
 function buildLoginForm(Application $app, $data = null)
