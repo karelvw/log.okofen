@@ -51,13 +51,13 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container" ng-controller="OkofenFormController">
 
       <div class="page-header">
-        <h1>ÖkoFEN log charts</h1>
+        <h1>ÖkoFEN Pelletronic Touch log Charts</h1>
       </div>
 		
-		<div class="row" ng-controller="OkofenFormController">
+		<div class="row" >
 		  <div class="col-md-3">
 		  	<form novalidate ng-submit="submit(logindata)" name="form">
 			  <div class="form-group">
@@ -79,6 +79,15 @@
 			  		<input type="checkbox" id="[[$index + 1]]" value="value"> [[value]]
 				</label>
 			</div>
+			<p>&nbsp;</p>
+			 <div class="form-inline" ng-show="showDatum">
+			  <div class="form-group">
+			    <label for="datum">Datum</label>
+			    <input type="text" class="form-control" id="datum" placeholder="datum">
+			  </div>
+			  <a href="#" class="btn btn-primary">Generate chart</a>
+			</div>
+
 		  </div>
 		</div>		
     </div><!-- /.container -->

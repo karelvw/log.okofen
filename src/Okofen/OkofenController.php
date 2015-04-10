@@ -113,8 +113,6 @@ class OkofenController implements ControllerProviderInterface
             elseif (preg_match("/Zubrp[0-9]_/", substr($i, 0, 7))){ $columns['ZUBR'][] = $i; }
             elseif (preg_match("/KT_/", substr($i, 0, 4))){ $columns['KT'][] = $i; }
             else $columns['GENERAL'][] = $i; 
-            
-            //
         }
         
         return $columns;
