@@ -4,7 +4,6 @@ namespace Okofen;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class OkofenController implements ControllerProviderInterface
 {
@@ -83,13 +82,21 @@ class OkofenController implements ControllerProviderInterface
         $file = 'touch_' . $date . '_' . $random . '.png';
         
         $username = $app['session']->get('username');
+        
+        $prev_graph = $app['session']->get('graph');
+        // remove previous graph
+        \SpoonFile::delete($prev_graph);
+        
         $path = '../data/touch/' . $username . '/images';
         
-        $plot = new \PHPlot(1400, 900);
+        $plot = new \PHPlot(1920, 1080);
         $plot->SetImageBorderType('plain');
         $plot->SetPlotType('lines');
         $plot->SetXTickLabelPos('none');
         $plot->SetXTickPos('none');
+        //$plot->TuneXAutoTicks(NULL, 'date');
+        //$plot->SetXLabelType('time', '%H:%M:%S');
+        //$plot->TuneXAutoTicks([$min_ticks], [$tick_mode], [$tick_inc_integer]);
         
         $columnsToShow = $app['session']->get('columnsToShow');
         
@@ -108,6 +115,9 @@ class OkofenController implements ControllerProviderInterface
         $plot->SetDataValues($toShow);
         $plot->SetLegend($columnsToShow);
         $plot->SetPlotAreaWorld(NULL, 0, NULL, NULL);
+              
+        $graph = $path . '/' . $file;
+        $app['session']->set('graph', $graph);
         
         // Don't draw the image yet
         // $plot->SetPrintImage(0);
@@ -115,11 +125,11 @@ class OkofenController implements ControllerProviderInterface
         $plot->SetIsInline("1");
         
         // $plot->SetIsInline(true);
-        $plot->SetOutputFile($path . '/' . $file);
+        $plot->SetOutputFile($graph);
         
         $plot->DrawGraph();
         
-        return $app->json($path . '/' . $file); // $app->stream($stream, 200, array('Content-Type' => 'image/png'));
+        return $app->json($graph); // $app->stream($stream, 200, array('Content-Type' => 'image/png'));
                                                     
         // return
     }
